@@ -1,6 +1,7 @@
 version: '3.3'
+
 services:
-  # Orion is the context broker
+  # Orion Context Broker
   orion:
     image: fiware/orion:2.2.0
     hostname: orion
@@ -8,7 +9,7 @@ services:
     depends_on:
       - mongo-db
     networks:
-      - fiware_dev
+      - fiware_orion_net
     ports:
       - "1026:1026"
     command: -dbhost mongo-db -logLevel DEBUG -noCache
@@ -16,26 +17,67 @@ services:
       test: curl --fail -s http://orion:1026/version || exit 1
 
 
-  # Databases
+  # MONGO DB solo para servicio de Orion
   mongo-db:
     image: mongo:3.6
     hostname: mongo-db
     container_name: db-mongo
-    expose:
-      - "27017"
     ports:
       - "27017:27017"
     networks:
-      - fiware_dev
+      - fiware_orion_net
     command: --bind_ip_all --smallfiles
     volumes:
-      - mongo-db:/data
+      - type: volume
+        source: mongo-db
+        target: /data
+    
+  # Persistencia de Datos Utilizando Cygnus
+  cygnus:
+    image: fiware/cygnus-ngsi:latest
+    hostname: cygnus
+    container_name: fiware-cygnus
+    networks:
+        - fiware_cygnus_net
+    depends_on:
+        - mysql-db
+        - orion
+    ports:
+        - "5050:5050"
+        - "5080:5080"
+    environment:
+        - "CYGNUS_MYSQL_HOST=mysql-db"
+        - "CYGNUS_MYSQL_PORT=3306"
+        - "CYGNUS_MYSQL_USER=root"
+        - "CYGNUS_MYSQL_PASS=123"
+        - "CYGNUS_LOG_LEVEL=DEBUG"
+        - "CYGNUS_SERVICE_PORT=5050"
+        - "CYGNUS_API_PORT=5080"
 
+  # MYSQL solo para utilizar Cygnus  
+  mysql-db:
+    restart: always
+    image: mysql:5.7.16
+    hostname: mysql-db
+    container_name: db-mysql
+    ports:
+        - "3306:3306"
+    environment:
+        - "MYSQL_ROOT_PASSWORD=123"
+        - "MYSQL_ROOT_HOST=%"
+    networks:
+      - fiware_cygnus_net
+    volumes: 
+      - type: volume
+        source: mysql-db
+        target: /var/lib/mysql
+
+# Redes
 networks:
-  fiware_dev:
-    ipam:
-      config:
-        - subnet: 172.18.1.0/24
+  fiware_orion_net:
+  fiware_cygnus_net:
 
+# Volumenes para persistir la data.
 volumes:
-  mongo-db: ~
+  mongo-db:
+  mysql-db:
