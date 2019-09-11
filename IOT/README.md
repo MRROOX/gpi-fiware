@@ -21,8 +21,8 @@
  sudo apt update 
  ```
 
-  ```
-  sudo apt upgrade
+```
+sudo apt upgrade
   ```
 
   ### Python 3 and Pip

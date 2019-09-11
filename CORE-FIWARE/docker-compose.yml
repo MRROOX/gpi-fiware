@@ -16,29 +16,11 @@ services:
     healthcheck:
       test: curl --fail -s http://orion:1026/version || exit 1
 
-
-  # MONGO DB solo para servicio de Orion
-  mongo-db:
-    image: mongo:3.6
-    hostname: mongo-db
-    container_name: db-mongo
-    ports:
-      - "27017:27017"
-    networks:
-      - fiware_orion_net
-    command: --bind_ip_all --smallfiles
-    volumes:
-      - type: volume
-        source: mongo-db
-        target: /data
-    
-  # Persistencia de Datos Utilizando Cygnus
+# Persistencia de Datos Utilizando Cygnus
   cygnus:
     image: fiware/cygnus-ngsi:latest
     hostname: cygnus
     container_name: fiware-cygnus
-    networks:
-        - fiware_cygnus_net
     depends_on:
         - mysql-db
         - orion
@@ -53,7 +35,41 @@ services:
         - "CYGNUS_LOG_LEVEL=DEBUG"
         - "CYGNUS_SERVICE_PORT=5050"
         - "CYGNUS_API_PORT=5080"
+    networks:
+      - fiware_cygnus_net
 
+
+  # Monitorizacion utilizando Grafana
+  grafana:
+    image: grafana/grafana
+    depends_on:
+        - crate-db
+    ports:
+        - "3000:3000"
+    environment:
+        - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-worldmap-panel
+    networks:
+      - fiware_grafana_net
+    volumes:
+      - type: volume
+        source: grafana-conf
+        target: /var/lib/grafana
+
+  # MONGO DB solo para servicio de Orion
+  mongo-db:
+    image: mongo:3.6
+    hostname: mongo-db
+    container_name: db-mongo
+    ports:
+      - "27017:27017"
+    command: --bind_ip_all --smallfiles
+    networks:
+      - fiware_orion_net
+    volumes:
+      - type: volume
+        source: mongo-db
+        target: /data
+    
   # MYSQL solo para utilizar Cygnus  
   mysql-db:
     restart: always
@@ -72,12 +88,33 @@ services:
         source: mysql-db
         target: /var/lib/mysql
 
+  # Crate para utilizar Grafana  
+  crate-db:
+    image: crate
+    hostname: crate-db
+    container_name: db-crate
+    ports:
+      # Admin UI
+      - "4200:4200"
+      # Transport protocol
+      - "4300:4300"
+   # command: crate -Clicense.enterprise=false -Cauth.host_based.enabled=false  -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*"
+    networks:
+      - fiware_grafana_net
+    volumes:
+      - type: volume
+        source: crate-db
+        target: /data
+
 # Redes
 networks:
   fiware_orion_net:
   fiware_cygnus_net:
+  fiware_grafana_net:
 
 # Volumenes para persistir la data.
 volumes:
   mongo-db:
   mysql-db:
+  crate-db:
+  grafana-conf:
