@@ -1,9 +1,28 @@
 version: '3.3'
 
 services:
+  # Portainer
+  portainer:
+    image: portainer/portainer
+    container_name: portainer_fiware
+    restart: on-failure
+    ports:
+      - "9999:9000"
+      - "8008:8080"
+    volumes:
+      - type: volume
+        source: portainer_data
+        target: /data
+      - type: bind
+        source: /usr/bin/docker
+        target: /usr/bin/docker
+      - type: bind
+        source: /var/run/docker.sock
+        target: /var/run/docker.sock
+
   # Orion Context Broker
   orion:
-    image: fiware/orion:2.2.0
+    image: fiware/orion
     hostname: orion
     container_name: fiware-orion
     depends_on:
@@ -114,6 +133,8 @@ networks:
 
 # Volumenes para persistir la data.
 volumes:
+  portainer_data:
+
   mongo-db:
   mysql-db:
   crate-db:
