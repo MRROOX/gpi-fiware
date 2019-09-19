@@ -1,60 +1,57 @@
-# List Of Fiware's GEs 
+# Lista de GEs de Fiware 
 Documentación Oficial: (https://github.com/FIWARE/catalogue)
 
-## Core Context Management 
+## Gestión del Contexto Básico 
  
 
-##### -Orion Context Broker  
+###### -Orion Context Broker  
 
-##### -STH Comet - short term memory storing (typically months) on MongoDB 
+##### SSTH Comet - almacenamiento de memoria a corto plazo (normalmente meses) en MongoDB 
 
-##### -Cygnus - managing history of context, can be injected to MySQL, MongoDB, Hadoop, Storm... 
+###### -Cygnus - administra la historia del contexto, puede ser inyectado a MySQL, MongoDB, Hadoop, Storm.... 
 
-##### -Draco - managing history of context in Apache NiFi - is based on flow-based programming 
+##### Draco - manejando la historia del contexto en Apache NiFi - se basa en programación basada en flujo 
 
-##### -Quantum Leap - storage of context data on time series database CrateDB 
+##### Quantum Leap: almacenamiento de datos contextuales en la base de datos de series temporales CrateDB 
 
-## Interface with IoT, Robots and Third-Party Systems 
+## Interfaz con IoT, robots y sistemas de terceros 
  
--IDAS - bridge between JSON, LWM2M, UltraLight, HTTP/MQTT and NGSI 
+-IDAS - puente entre JSON, LWM2M, UltraLight, HTTP/MQTTT y NGSI 
 
--Fast RTPS - communication with ROS2 - Robot Operating System 
+-RTPS rápido - comunicación con ROS2 - Sistema Operativo del Robot 
 
--Micro XRCE-DDS - based on publish-subscribe messaging pattern 
+-Micro XRCE-DDS - basado en el patrón de mensajería de publicación-suscripción 
 
--OpenMTC - communication with OneM2M  
+-OpenMTC - comunicación con OneM2M  
 
--Domibus - exchanging electronic data and documents with other users safely 
+-Domibus - intercambio seguro de datos y documentos electrónicos con otros usuarios 
 
-## Context Processing, Analysis and Visualisation 
+## Procesamiento de contexto, análisis y visualización 
 
--Wirecloud - developing operational dashboards 
+-Wirecloud - desarrollo de cuadros de mando operativos 
 
--Knowage - business analytics over data systems including big data 
+-Conocimiento: análisis de negocio sobre sistemas de datos, incluyendo datos de gran tamaño. 
 
--Kurento - real-time processing of media streams 
+-Kurento - procesamiento en tiempo real de flujos de medios 
 
--Cosmos - BigData analysis  
+-Cosmos -Análisis de BigData  
 
--FogFlow - distributed execution of processing of cloud and edges  
+-FogFlow - ejecución distribuida del procesamiento de nubes y bordes  
 
--Perseo - rules based system that sends HTTP requests, emails, tweets, SMS etc. 
+-erseo - sistema basado en reglas que envía peticiones HTTP, correos electrónicos, tweets, SMS, etc. 
 
-## Context Data/API Management, Publication and Monetisation 
+## Gestión, publicación y monetización de datos contextuales/API 
  
- -Keyrock - OAuth2 based authentication   
+ -Keyrock - Autenticación basada en OAuth2   
 
--Wilma - proxy functions within OAuth2 based authentication, PEP functions in XACML schema 
+-Wilma - funciones proxy dentro de la autenticación basada en OAuth2, funciones PEP en el esquema XACML 
 
--AuthZForce PDP/PAP - PDP/PAP function within access control schema based on XACML 
+-AuthZForce PDP/PAP - Función PDP/PAP dentro del esquema de control de acceso basado en XACML 
 
--CKAN extensions - CKAN Open Data publication, access and pricing 
+-Extensiones CKAN - CKAN Open Data publicación, acceso y precios 
 
--Biz Framework - Context API/Data monetisation  
+-Marco Biz - Contexto API/Data monetisation  
 
--Idra - provides single API and a standard metadata format for discovering open datasets 
+-Idra - proporciona una sola API y un formato de metadatos estándar para descubrir conjuntos de datos abiertos. 
 
--APInf - API management for  
-
-
- 
+-APInf - Gestión de la API para  
