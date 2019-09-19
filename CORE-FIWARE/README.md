@@ -158,7 +158,6 @@ Podemos leer en ambos sentidos, de padre a hijo y de niño rom a padre, por lo q
 
 Necesitamos un agente IoT como conexión entre el nodo http, al que un dispositivo IoT está enviando datos, y Orion Context Broker. La conexión se realiza mediante un agente IoT de un tipo determinado. También traduce los datos de un protocolo a NGSI (porque su conexión hacia el norte es Orion Context Broker). 
 
-Traducción realizada con el traductor www.DeepL.com/Translator
 
 ## Creación de grupos de servicio
 
@@ -310,7 +309,6 @@ A continuación, debemos informar a Cygnus sobre los cambios en los datos de con
 
 Creamos un patrón de mensajería de publicación-suscripción - el creador de mensajes (editor) no determina quién recibirá un tipo específico de mensaje, sino que lo clasifica en categorías sin saber quién y si recibirá ese mensaje. 
 
-Traducción realizada con el traductor www.DeepL.com/Translator
 
 ```
 curl -iX POST \ 
@@ -346,7 +344,7 @@ Utilizamos MySQL para almacenar datos de contexto. El historial de cambios en el
 
 Usando el siguiente comando podemos conectarnos a una base de datos a través del puerto que especificamos en el archivo docker-composition: 
 
-Traducción realizada con el traductor www.DeepL.com/Translator
+
 ```
 docker exec -it  db-mysql mysql -h mysql-db -P 3306  -u root -p123 
 
