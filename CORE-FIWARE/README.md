@@ -19,8 +19,6 @@ docker-compose up -d
 
 http://localhost:4200
 
-
-
 # Configuracion de Grafana
 
 En localhost:3000 ingresar utilizando con el usario `admin` y la password `admin`, cambiar password por una adecuada.
@@ -36,17 +34,10 @@ Database: doc
 User: crate
 SSL Mode: disable 
 ```
-## Creación de entidades 
+## Creación de Entidades 
 
 Entity es un único elemento de Context descrito por un objeto JSON. 
- 
-
 Creamos entidades enviando una solicitud POST a Orion Context Broker.
-
-
-#### Entidad de segmento - un segmento de camino entre dos cruces 
-
-
 ```
 curl -iX POST \
   'http://localhost:1026/v2/entities' \ 
@@ -56,47 +47,47 @@ curl -iX POST \
        "type": "Segment" 
        }' 
 ```
-
-#### Dos entidades de cruce diferentes (creación de entidades múltiples):
-
 ```
 curl -iX POST \
   'http://localhost:1026/v2/entities' \
   -H 'Content-Type: application/json' \ 
   -d '{
-    "id": "urn:ngsi-ld:Crossing:002", 
-    "type": "Crossing", 
+    "id": "urn:ngsi-ld:DHT22:001", 
+    "type": "DHT", 
     "location": { 
         "type": "geo:json", 
         "value": { 
              "type": "Point", 
-             "coordinates": [-38.737541, -72.588803] 
+             "coordinates": [-38.748890, -72.617191] 
         } 
     }, 
-    "name": { 
+    "sector": { 
         "type": "Text", 
-        "value": "Diego Portales / Manuel Bulnes" 
+        "value": "UFRO" 
     } 
-},
-
-{ 
-    "id": "urn:ngsi-ld:Crossing:001", 
-    "type": "Crossing", 
-    "location": { 
-        "type": "geo:json", 
-        "value": { 
-             "type": "Point", 
-             "coordinates": [-38.737359, -72.590131] 
-        } 
-    }, 
-    "name": { 
-        "type": "Text", 
-        "value": "Diego Portales / Arturo Prat" 
-    } 
-}' 
-
+}
 ```
-## Actualización de entidades
+```
+curl -iX POST \
+  'http://localhost:1026/v2/entities' \
+  -H 'Content-Type: application/json' \ 
+  -d '{
+    "id": "urn:ngsi-ld:DHT22:002", 
+    "type": "DHT", 
+    "location": { 
+        "type": "geo:json", 
+        "value": { 
+             "type": "Point", 
+             "coordinates": [-38.748890, -72.617191] 
+        } 
+    }, 
+    "sector": { 
+        "type": "Text", 
+        "value": "UFRO" 
+    } 
+}
+```
+## Actualización de Entidades
 
 Podemos actualizar las entidades después de la creación. En este ejemplo añadimos refArgumento adicional que es responsable de crear una relación. El trabajo con las relaciones de ordenación se explica en el siguiente capítulo. 
 La relación es un vínculo entre dos o más entidades.
@@ -110,16 +101,16 @@ curl -iX POST \
   "actionType":"APPEND", 
   "entities":[ 
     {
-      "id":"urn:ngsi-ld:Crossing:001",
-      "type":"Crossing",
+      "id":"urn:ngsi-ld:DHT22:001",
+      "type":"DHT",
       "refSegment": { 
         "type": "Relationship", 
-        "value": "urn:ngsi-ld:Segment:001" 
+        "value": "urn:ngsi-ld:DHT22:001" 
       } 
     }, 
     { 
-      "id":"urn:ngsi-ld:Crossing:002",
-      "type":"Crossing", 
+      "id":"urn:ngsi-ld:DHT22:002",
+      "type":"DHT", 
       "refSegment": { 
         "type": "Relationship", 
         "value": "urn:ngsi-ld:Segment:001" 
@@ -137,15 +128,18 @@ Podemos leer tanto de la entidad hija como de la entidad matriz:
 
 
 ```
-curl -X -G GET 'http://localhost:1026/v2/entities/urn:ngsi-ld:Crossing:001' -d 'type=Crossing' -d'options=values' -d'attrs=refSegment' | python -mjson.tool 
+curl -X -G GET 'http://localhost:1026/v2/entities/urn:ngsi-ld:DHT22:001' 
+-d 'type=DHT' 
+-d'options=values' 
+-d'attrs=refSegment' | python -mjson.tool 
 ```
 y de padre a hijo o hijos: 
 
 ```
 curl -G -X GET \ 
   'http://localhost:1026/v2/entities' \ 
-  -d 'q=refSegment==urn:ngsi-ld:Segment:001' \ 
-  -d 'type=Crossing' \ 
+  -d 'q=refSegment==urn:ngsi-ld:DHT22:001' \ 
+  -d 'type=DHT' \ 
   -d 'options=values' \ 
   -d 'attrs=location' \ 
  | python -mjson.tool 
@@ -181,10 +175,10 @@ curl -iX POST \
    } 
 
  ] 
-
 }' 
 ```
-## Creación de sensores
+
+## Creación de Sensores
 
 ```
 curl -iX POST  'http://localhost:4061/iot/devices' \
@@ -192,18 +186,26 @@ curl -iX POST  'http://localhost:4061/iot/devices' \
   -H 'fiware-service: openiot' \
   -H 'fiware-servicepath: /' \
   -d '{
-    "devices": [ 
+    "devices": [
    { 
-     "device_id":   "camCar001", 
-     "entity_name": "urn:ngsi_ld:camCar:001", 
-     "entity_type": "camCar", 
-     "timezone":    "Chile, Santiago", 
+     "device_id": "DHT22001", 
+     "entity_name": "urn:ngsi_ld:DHT22:001", 
+     "entity_type": "DHT", 
+     "timezone": "Chile, Santiago",
      "attributes": [ 
-       { "object_id": "direction1", "name": "carCount1", "type": "integer" },
-       { "object_id": "direction2", "name": "carCount2", "type": "integer" } 
-     ], 
+       { "object_id": "temdht22",
+         "name": "Tem",
+         "type": "integer"
+         },
+       { "object_id": "humdht22",
+         "name": "Hum",
+         "type": "integer"
+         }], 
      "static_attributes": [ 
-       { "name":"refSegment", "type": "Relationship", "value": "urn:ngsi-ld:Segment:001"} 
+       {"name":"refSegment",
+        "type": "Relationship",
+        "value": "urn:ngsi-ld:Segment:001"
+        } 
      ] 
    } 
  ] 
