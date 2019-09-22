@@ -1,5 +1,6 @@
 {
     "nombre":"Raspberry+DHT22",
+    "time_sleep":"30",
     "host_r":"10.11.0.107",
     "port_r":"7896",
     "remote_r":"/iot/d",
