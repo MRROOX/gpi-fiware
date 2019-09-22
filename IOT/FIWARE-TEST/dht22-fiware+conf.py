@@ -1,5 +1,6 @@
 import os
 import time
+import signal
 import Adafruit_DHT
 
 import requests
@@ -16,12 +17,14 @@ pprint(iot_conf)
 url = "http://"+iot_conf["host_r"]+":"+iot_conf["port_r"]+iot_conf["remote_r"]
 print(url)
 
-while True:
+print("DHT22 -----> Fiware")
+
+try:
+    while True:
     humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
     
     if humidity is not None and temperature is not None:
-        #print("Temp={0:0.1f}*C  Humidity={1:0.1f}%".format(temperature, humidity)
-
+        
         Temperatura = "{0:0.1f}".format(temperature, humidity)
         Humedad = "{1:0.1f}".format(temperature, humidity)
 
@@ -39,16 +42,13 @@ while True:
 
     else:
         print("Failed to retrieve data from humidity sensor")
+
+    print("Esperando "+iot_conf["time_sleep"]+" segundos...")    
     time.sleep(iot_conf["time_sleep"])
+
+except KeyboadrInterrupt:
+    print("Se ha interrumpido la ejecución del script...")    
+
+print("Finalizando ...")
+
    
-
-if __name__ == '__main__':
-    try:
-        main()
-    except KeyboardInterrupt:
-        print('Interrupted')
-        try:
-            sys.exit(0)
-        except SystemExit:
-            os._exit(0)
-
