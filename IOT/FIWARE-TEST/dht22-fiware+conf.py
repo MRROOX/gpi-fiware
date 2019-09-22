@@ -25,7 +25,6 @@ while True:
     
         payloadTem = "temdht22|{0:0.1f}".format(temperature)
   
-
         responseTem = requests.request("POST", url, data=payloadTem, headers=iot_conf["headers"], params=iot_conf["querystring"])
 
         print(responseTem.text)
