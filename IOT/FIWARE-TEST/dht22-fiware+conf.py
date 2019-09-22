@@ -11,7 +11,6 @@ DHT_PIN = 4
 
 json_data_file = open("./config/iot-conf.json", "r").read() # r for reading the file
 iot_conf = json.loads(json_data_file)
-
 pprint(iot_conf)
 
 url = "http://"+iot_conf["host_r"]+":"+iot_conf["port_r"]+iot_conf["remote_r"]
@@ -21,7 +20,7 @@ while True:
     humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
     
     if humidity is not None and temperature is not None:
-        print("Temp={0:0.1f}*C  Humidity={1:0.1f}%".format(temperature, humidity)
+        #print("Temp={0:0.1f}*C  Humidity={1:0.1f}%".format(temperature, humidity)
 
         Temperatura = "{0:0.1f}".format(temperature, humidity)
         Humedad = "{1:0.1f}".format(temperature, humidity)
