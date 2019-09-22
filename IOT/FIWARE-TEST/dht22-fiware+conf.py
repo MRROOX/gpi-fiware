@@ -27,18 +27,21 @@ try:
             
             Temperatura = "{0:0.1f}".format(temperature, humidity)
             Humedad = "{1:0.1f}".format(temperature, humidity)
+            
+            print("Temperatura="+Temperatura)
+            print("Humedad="+Humedad)
 
             payloadTem = "temdht22|"+Temperatura
     
             responseTem = requests.request("POST", url, data=payloadTem, headers=iot_conf["headers"], params=iot_conf["querystring"])
 
-            print(responseTem.text)
+           # print(responseTem.text)
 
             payloadHum = "humdht22|"+Humedad
 
             responseHum = requests.request("POST", url, data=payloadHum, headers=iot_conf["headers"], params=iot_conf["querystring"])
 
-            print(responseHum.text)
+            # print(responseHum.text)
 
         else:
             print("Error, al obtener datos del sensor DHT22")
