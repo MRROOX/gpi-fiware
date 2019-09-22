@@ -1,13 +1,13 @@
-# import os
-# import time
-# import Adafruit_DHT
+import os
+import time
+import Adafruit_DHT
 
 import requests
 import json
 from pprint import pprint
 
-# DHT_SENSOR = Adafruit_DHT.DHT22
-# DHT_PIN = 4
+DHT_SENSOR = Adafruit_DHT.DHT22
+DHT_PIN = 4
 
 json_data_file = open("./config/iot-conf.json", "r").read() # r for reading the file
 iot_conf = json.loads(json_data_file)
