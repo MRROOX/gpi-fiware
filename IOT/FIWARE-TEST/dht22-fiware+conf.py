@@ -43,10 +43,10 @@ try:
         else:
             print("Error, al obtener datos del sensor DHT22")
 
-        print("Esperando "+iot_conf["time_sleep"]+" segundos...")    
+        print("Esperando "+str(iot_conf["time_sleep"])+" segundos...")    
         time.sleep(iot_conf["time_sleep"])
 
-except KeyboadrInterrupt:
+except KeyboardInterrupt:
     print("Se ha interrumpido la ejecución del script...")    
 
 print("Finalizando ...")
