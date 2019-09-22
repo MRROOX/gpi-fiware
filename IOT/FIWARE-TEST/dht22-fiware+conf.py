@@ -1,5 +1,6 @@
 import os
 import time
+import signal
 import Adafruit_DHT
 
 import requests
@@ -9,46 +10,48 @@ from pprint import pprint
 DHT_SENSOR = Adafruit_DHT.DHT22
 DHT_PIN = 4
 
-json_data_file = open("./config/iot-conf.json", "r").read() # r for reading the file
+json_data_file = open("./config/iot-conf.json", "r").read()
 iot_conf = json.loads(json_data_file)
 pprint(iot_conf)
 
 url = "http://"+iot_conf["host_r"]+":"+iot_conf["port_r"]+iot_conf["remote_r"]
 print(url)
 
-while True:
-    humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
+print("DHT22 -----> Fiware")
+
+try:
+    while True:
+        humidity, temperature = Adafruit_DHT.read_retry(DHT_SENSOR, DHT_PIN)
+        
+        if humidity is not None and temperature is not None:
+            
+            Temperatura = "{0:0.1f}".format(temperature, humidity)
+            Humedad = "{1:0.1f}".format(temperature, humidity)
+            
+            print("Temperatura="+Temperatura)
+            print("Humedad="+Humedad)
+
+            payloadTem = "temdht22|"+Temperatura
     
-    if humidity is not None and temperature is not None:
-        #print("Temp={0:0.1f}*C  Humidity={1:0.1f}%".format(temperature, humidity)
+            responseTem = requests.request("POST", url, data=payloadTem, headers=iot_conf["headers"], params=iot_conf["querystring"])
 
-        Temperatura = "{0:0.1f}".format(temperature, humidity)
-        Humedad = "{1:0.1f}".format(temperature, humidity)
+           # print(responseTem.text)
 
-        payloadTem = "temdht22|"+Temperatura
-  
-        responseTem = requests.request("POST", url, data=payloadTem, headers=iot_conf["headers"], params=iot_conf["querystring"])
+            payloadHum = "humdht22|"+Humedad
 
-        print(responseTem.text)
+            responseHum = requests.request("POST", url, data=payloadHum, headers=iot_conf["headers"], params=iot_conf["querystring"])
 
-        payloadHum = "humdht22|"+Humedad
+            # print(responseHum.text)
 
-        responseHum = requests.request("POST", url, data=payloadHum, headers=iot_conf["headers"], params=iot_conf["querystring"])
+        else:
+            print("Error, al obtener datos del sensor DHT22")
 
-        print(responseHum.text)
+        print("Esperando "+str(iot_conf["time_sleep"])+" segundos...")    
+        time.sleep(iot_conf["time_sleep"])
 
-    else:
-        print("Failed to retrieve data from humidity sensor")
-    time.sleep(iot_conf["time_sleep"])
+except KeyboardInterrupt:
+    print("Se ha interrumpido la ejecución del script...")    
+
+print("Finalizando ...")
+
    
-
-if __name__ == '__main__':
-    try:
-        main()
-    except KeyboardInterrupt:
-        print('Interrupted')
-        try:
-            sys.exit(0)
-        except SystemExit:
-            os._exit(0)
-
