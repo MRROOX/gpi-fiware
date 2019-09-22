@@ -69,6 +69,8 @@ services:
     ports:
         - "5050:5050"
         - "5080:5080"
+    networks:
+      - fiware_cygnus_net
     environment:
         - "CYGNUS_MYSQL_HOST=mysql-db"
         - "CYGNUS_MYSQL_PORT=3306"
@@ -77,8 +79,7 @@ services:
         - "CYGNUS_LOG_LEVEL=DEBUG"
         - "CYGNUS_SERVICE_PORT=5050"
         - "CYGNUS_API_PORT=5080"
-    networks:
-      - fiware_cygnus_net
+
 
 
   # Monitorizacion utilizando Grafana
@@ -96,6 +97,21 @@ services:
       - type: volume
         source: vol_grafana-conf
         target: /var/lib/grafana
+  # Quantum Leap is persisting Short Term History to Crate-DB
+  quantumleap:
+    image: smartsdk/quantumleap:0.6.1
+    hostname: quantumleap
+    container_name: fiware-quantumleap
+    ports:
+      - "8668:8668"
+    networks:
+      - fiware_grafana_net
+    depends_on:
+      - crate-db
+    environment:
+      - CRATE_HOST=crate-db
+    healthcheck:
+      test: curl --fail -s http://localhost:8668/v2/version || exit 1
 
   # MONGO DB solo para servicio de Orion
   mongo-db:
