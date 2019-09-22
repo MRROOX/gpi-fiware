@@ -105,7 +105,7 @@ curl -iX POST \
       "type":"DHT",
       "refSegment": { 
         "type": "Relationship", 
-        "value": "urn:ngsi-ld:DHT22:001" 
+        "value": "urn:ngsi-ld:Segment:001" 
       } 
     }, 
     { 
@@ -130,8 +130,8 @@ Podemos leer tanto de la entidad hija como de la entidad matriz:
 ```
 curl -X -G GET 'http://localhost:1026/v2/entities/urn:ngsi-ld:DHT22:001' 
 -d 'type=DHT' 
--d'options=values' 
--d'attrs=refSegment' | python -mjson.tool 
+-d 'options=values' 
+-d 'attrs=refSegment' | python -mjson.tool 
 ```
 y de padre a hijo o hijos: 
 
@@ -150,7 +150,13 @@ Podemos leer en ambos sentidos, de padre a hijo y de niño rom a padre, por lo q
 
 # Agente de IOT
 
-Necesitamos un agente IoT como conexión entre el nodo http, al que un dispositivo IoT está enviando datos, y Orion Context Broker. La conexión se realiza mediante un agente IoT de un tipo determinado. También traduce los datos de un protocolo a NGSI (porque su conexión hacia el norte es Orion Context Broker). 
+fuente: https://github.com/FIWARE/tutorials.IoT-Agent
+
+Un agente IoT es un componente que permite a un grupo de dispositivos enviar sus datos y ser gestionados desde un Context Broker utilizando sus propios protocolos nativos. Los agentes de IO también deberían poder ocuparse de los aspectos de seguridad de la plataforma FIWARE (autenticación y autorización del canal) y prestar otros servicios comunes al programador del dispositivo.
+
+El Orion Context Broker utiliza exclusivamente peticiones NGSI para todas sus interacciones. Cada agente IoT proporciona una interfaz NGSI de puerto norte que se utiliza para las interacciones con el agente de contexto y todas las interacciones debajo de este puerto se producen utilizando el protocolo nativo de los dispositivos conectados.
+
+En efecto, esto proporciona una interfaz estándar para todas las interacciones de la IO a nivel de gestión de la información contextual. Cada grupo de dispositivos de IO es capaz de utilizar sus propios protocolos propietarios y mecanismos de transporte dispares bajo el capó, mientras que el agente de IOT asociado ofrece un patrón de fachada para manejar esta complejidad.
 
 
 ## Creación de grupos de servicio
@@ -173,7 +179,6 @@ curl -iX POST \
      "entity_type": "Thing", 
      "resource":    "/iot/d" 
    } 
-
  ] 
 }' 
 ```
@@ -189,17 +194,17 @@ curl -iX POST  'http://localhost:4061/iot/devices' \
     "devices": [
    { 
      "device_id": "DHT22001", 
-     "entity_name": "urn:ngsi_ld:DHT22:001", 
+     "entity_name": "urn:ngsi_ld:DHT22:003", 
      "entity_type": "DHT", 
      "timezone": "Chile, Santiago",
      "attributes": [ 
        { "object_id": "temdht22",
          "name": "Tem",
-         "type": "integer"
+         "type": "Integer"
          },
        { "object_id": "humdht22",
          "name": "Hum",
-         "type": "integer"
+         "type": "Integer"
          }], 
      "static_attributes": [ 
        {"name":"refSegment",
@@ -211,47 +216,55 @@ curl -iX POST  'http://localhost:4061/iot/devices' \
  ] 
 }' 
 ```
-## Punto final de datos
-Por lo tanto, el dispositivo enviará los datos a través de solicitudes GET o POST a la url: 
+## Recursos
+Enviando datos a un recurso ubicado en la url: 
  
  ```
  http://iot-agent:7896/iot/d?i=<device_id>&k=4jggokgpepnvsb2uv4s40d59ov 
 ```
-#### Publicar una consulta enviada por un dispositivo de IO: 
+#### Enviar datos por un Dispositivo de IO: 
 
 ```
 curl -iX POST \ 
-  'http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=camCar001' \ 
+  'http://localhost:7896/iot/d?k=4jggokgpepnvsb2uv4s40d59ov&i=DHT22003' \ 
   -H 'Content-Type: text/plain' \ 
-  -d 'c|[1,1]' 
+  -d 'tempdht22|19'
 ```
 La última línea de esa consulta son los datos del protocolo 2.0 Ultralight. 
  
-## Borrado de sensores
+## Borrado de Sensores
 ```
-curl -iX DELETE   --url 'http://localhost:4061/iot/devices/camCar001' -H 'fiware-service: openiot'   -H 'fiware-servicepath: /' 
+curl -iX DELETE 
+--url 'http://localhost:4061/iot/devices/DHT22003' 
+-H 'fiware-service: openiot' 
+-H 'fiware-servicepath: /' 
 ```
+```
+curl  -iX DELETE 
+--url 'http://localhost:1026/v2/subscriptions/' \ 
+-H 'Content-Type: application/json' \ 
+-H 'fiware-service: openiot' \ 
+-H 'fiware-servicepath: /' \ 
 ```
 
-curl  -iX DELETE –url   'http://localhost:1026/v2/subscriptions/' \ 
-  -H 'Content-Type: application/json' \ 
-  -H 'fiware-service: openiot' \ 
-  -H 'fiware-servicepath: /' \ 
-```
-
-## Listado de todos los sensores
+## Listado de todos los Sensores
 
 ```
-curl -X GET  'http://localhost:4061/iot/devices'   -H 'fiware-service: openiot'   -H 'fiware-servicepath: /' | python -mjson.tool 
+curl -X GET 'http://localhost:4061/iot/devices' 
+-H 'fiware-service: openiot' 
+-H 'fiware-servicepath: /' | python -mjson.tool 
 ```
-## Comprobación de actualización de datos
+## Comprobación de actualización de Datos
 El Agente IoT creó una entidad de sensor en Orion Context Broker y después de eso podemos comprobar esa entidad para asegurarnos de que el proceso de creación fue exitoso. 
 
 ```
-curl  -i -X GET  'http://localhost:1026/v2/entities/urn:ngsi_ld:camCar:001'   -H 'Content-Type: application/json'   -H 'fiware-service: openiot' -H 'fiware-servicepath: /' | python -mjson.tool 
+curl  -i -X GET 'http://localhost:1026/v2/entities/urn:ngsi_ld:camCar:001' 
+-H 'Content-Type: application/json' 
+-H 'fiware-service: openiot'
+-H 'fiware-servicepath: /' | python -mjson.tool 
 ```
 
-## Creación del actuador
+## Creación del Actuador
 
 El proceso de creación de actuadores es el mismo que el de la creación de un sensor. Lo hacemos enviando una solicitud POST a un agente de la IOT.  Luego crea una entidad en Orión. 
 En el argumento "endpoint" determinamos una URL a la que se enviarán los datos de actuación.  
@@ -383,13 +396,12 @@ sudo apt install mysql-client-core-5.7
 
  Ahora podemos usar el synax de MySQL para acceder a los datos contenidos en la base de datos.
 
-
 ```
 SHOW DATABASES; 
 
 SHOW SCHEMAS; 
 
-SHOW tables FROM openiot 
+SHOW tables FROM openiot;
 ```
 Para obtener 10 últimas anotaciones 
 ```

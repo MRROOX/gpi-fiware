@@ -55,6 +55,8 @@ services:
       - "IOTA_MONGO_DB=iotagent-ul"
       - "IOTA_HTTP_PORT=7896"
       - "IOTA_PROVIDER_URL=http://iot-agent:4061"
+    networks: 
+      - fiware_orion_net
 
 # Persistencia de Datos Utilizando Cygnus
   cygnus:
