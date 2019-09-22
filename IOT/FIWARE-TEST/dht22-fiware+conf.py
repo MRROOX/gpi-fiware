@@ -23,13 +23,13 @@ while True:
     if humidity is not None and temperature is not None:
         print("Temp={0:0.1f}*C  Humidity={1:0.1f}%".format(temperature, humidity))
     
-        payloadTem = "temdht22|{0:0.1f}".format(temperature)
+        payloadTem = "temdht22|{0:0.1f}".format(temperature, humidity))
   
         responseTem = requests.request("POST", url, data=payloadTem, headers=iot_conf["headers"], params=iot_conf["querystring"])
 
         print(responseTem.text)
 
-        payloadHum = "humdht22|{1:0.1f}".format(humidity)
+        payloadHum = "humdht22|{1:0.1f}".format(temperature, humidity))
 
         responseHum = requests.request("POST", url, data=payloadHum, headers=iot_conf["headers"], params=iot_conf["querystring"])
 
