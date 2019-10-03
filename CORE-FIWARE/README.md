@@ -152,7 +152,7 @@ curl -iX POST \
    { 
      "apikey":      "4jggokgpepnvsb2uv4s40d59ov", 
      "cbroker":     "http://orion:1026", 
-     "entity_type": "Thing", 
+     "entity_type": "DHT", 
      "resource":    "/iot/d" 
    } 
  ] 
@@ -170,17 +170,17 @@ curl -iX POST  'http://localhost:4061/iot/devices' \
     "devices": [
    { 
      "device_id": "DHT22001", 
-     "entity_name": "urn:ngsi_ld:DHT22:003", 
+     "entity_name": "urn:ngsi_ld:DHT22:001", 
      "entity_type": "DHT", 
      "timezone": "Chile, Santiago",
      "attributes": [ 
        { "object_id": "temdht22",
          "name": "Tem",
-         "type": "Integer"
+         "type": "Double"
          },
        { "object_id": "humdht22",
          "name": "Hum",
-         "type": "Integer"
+         "type": "Double"
          }], 
      "static_attributes": [ 
        {"name":"refSegment",
@@ -219,7 +219,7 @@ La última línea de esa consulta son los datos del protocolo 2.0 Ultralight.
 ## Borrado de Sensores
 ```
 curl -iX DELETE 
---url 'http://localhost:4061/iot/devices/DHT22003' 
+--url 'http://localhost:4061/iot/devices/DHT22001' 
 -H 'fiware-service: openiot' 
 -H 'fiware-servicepath: /' 
 ```

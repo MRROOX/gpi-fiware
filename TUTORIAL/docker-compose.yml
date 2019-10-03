@@ -1,24 +1,24 @@
 version: '3.3'
 
 services:
-  # Portainer
-  portainer:
-    image: portainer/portainer
-    container_name: portainer_fiware
-    restart: on-failure
-    ports:
-      - "9999:9000"
-      - "8008:8080"
-    volumes:
-      - type: volume
-        source: vol_portainer_data
-        target: /data
-      - type: bind
-        source: /usr/bin/docker
-        target: /usr/bin/docker
-      - type: bind
-        source: /var/run/docker.sock
-        target: /var/run/docker.sock
+  # # Portainer
+  # portainer:
+  #   image: portainer/portainer
+  #   container_name: portainer_fiware
+  #   restart: on-failure
+  #   ports:
+  #     - "9999:9000"
+  #     - "8008:8080"
+  #   volumes:
+  #     - type: volume
+  #       source: vol_portainer_data
+  #       target: /data
+  #     - type: bind
+  #       source: /usr/bin/docker
+  #       target: /usr/bin/docker
+  #     - type: bind
+  #       source: /var/run/docker.sock
+  #       target: /var/run/docker.sock
 
   # Orion Context Broker
   orion:
@@ -97,8 +97,7 @@ services:
         target: /var/lib/grafana
   # Quantum Leap is persisting Short Term History to Crate-DB
   quantumleap:
-    image: smartsdk/quantumleap:0.6.1
-    hostname: quantumleap
+    image: smartsdk/quantumleap
     container_name: fiware-quantumleap
     ports:
       - "8668:8668"
@@ -107,8 +106,10 @@ services:
       - fiware_orion_net
     depends_on:
       - crate-db
+      - orion
+      - mongo-db
     environment:
-      - CRATE_HOST=crate-db
+      - "CRATE_HOST=http://crate-db"
     healthcheck:
       test: curl --fail -s http://localhost:8668/v2/version || exit 1
 
@@ -158,6 +159,7 @@ services:
    # command: crate -Clicense.enterprise=false -Cauth.host_based.enabled=false  -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*"
     networks:
       - fiware_grafana_net
+    command: -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*"
     volumes:
       - type: volume
         source: vol_crate-db
