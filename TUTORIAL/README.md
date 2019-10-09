@@ -6,6 +6,11 @@ fuente: https://fiware-training.readthedocs.io/es_MX/latest/casodeestudio/descri
 
 https://hub.docker.com/r/fiware/quantum-leap/dockerfile
 
+https://camo.githubusercontent.com/93f44facc15bb6a9edf6ab9968fc1d8b862033fe/68747470733a2f2f6669776172652e6769746875622e696f2f7475746f7269616c732e496f542d4167656e742f696d672f6172636869746563747572652e706e67
+
+
+#### Seguridad : https://github.com/FIWARE/catalogue/blob/master/security/README.md
+
 ```
 POST http://localhost:1026/v2/entities
 Header: Content-Type: "application/json"
