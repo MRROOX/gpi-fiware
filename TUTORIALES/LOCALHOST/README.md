@@ -49,7 +49,7 @@ Header: Content-Type: "application/json"
     "location": {
          "value": {
             "type": "Point",
-            "coordinates": [0,0]
+            "coordinates": [-38.751398,-72.605476]
         },
         "type": "geo:json"
   },
