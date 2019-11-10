@@ -1,0 +1,31 @@
+{ 
+    "id":"DHT22001",
+    "type":"DHT22",
+    "dateObserved":{
+        "type":"DateTime",
+        "value":""
+    },
+    "address": {
+        "type": "StructuredValue",
+        "value": {
+            "addressCountry": "CL",
+            "addressLocality": "Temuco",
+            "streetAddress": "UFRO"           
+        }
+   },
+    "location": {
+         "value": {
+            "type": "Point",
+            "coordinates": [-38.751398,-72.605476]
+        },
+        "type": "geo:json"
+  },
+    "temperature":{
+        "type":"Number",
+        "value":"0"
+    },
+    "relativeHumidity":{
+        "type":"Number",
+        "value":"0"
+    }
+}
