@@ -1,9 +1,9 @@
-{ 
-    "id":"DHT22001",
+{
+    "id":"DHT22002",
     "type":"DHT22",
     "dateObserved":{
         "type":"DateTime",
-        "value":""
+        "value":"2019-09-30T18:00:00-05:00"
     },
     "address": {
         "type": "StructuredValue",
@@ -16,7 +16,9 @@
     "location": {
          "value": {
             "type": "Point",
-            "coordinates": [-38.751398,-72.605476]
+            "coordinates": [-38.751398,-72.605476],
+            "latitude": -38.751398,
+            "longitude": -72.605476
         },
         "type": "geo:json"
   },

@@ -10,14 +10,14 @@ from pprint import pprint
 DHT_SENSOR = Adafruit_DHT.DHT22
 DHT_PIN = 4
 
-json_data_file = open("./config/iot-conf.json", "r").read()
+json_data_file = open("./config/iot-agent.conf.json", "r").read()
 iot_conf = json.loads(json_data_file)
 pprint(iot_conf)
 
 url = "http://"+iot_conf["host_r"]+":"+iot_conf["port_r"]+iot_conf["remote_r"]
 print(url)
 
-print("DHT22 -----> Fiware")
+print("DHT22 ---to--> Fiware")
 
 try:
     while True:
