@@ -59,3 +59,5 @@ New Dashboard
 FROM etdht22 Time column time_index Metric column entity_id SELECT Column: temperature Column: relativehumidity 
 ```
 
+
+
