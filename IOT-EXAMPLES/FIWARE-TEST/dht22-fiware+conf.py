@@ -38,9 +38,9 @@ try:
 
            # print(responseTem.text)
 
-            # payloadHum = "h|"+Humedad
+            payloadHum = "h|"+Humedad
 
-            # responseHum = requests.request("POST", url, data=payloadHum, headers=iot_conf["headers"], params=iot_conf["querystring"])
+            responseHum = requests.request("POST", url, data=payloadHum, headers=iot_conf["headers"], params=iot_conf["querystring"])
 
             # print(responseHum.text)
 
