@@ -1,26 +1,7 @@
 version: '3.3'
 
 services:
-  # Portainer
-  portainer:
-    image: portainer/portainer
-    container_name: portainer_fiware
-    restart: on-failure
-    ports:
-      - "9999:9000"
-      - "8008:8080"
-    volumes:
-      - type: volume
-        source: vol_portainer_data
-        target: /data
-      - type: bind
-        source: /usr/bin/docker
-        target: /usr/bin/docker
-      - type: bind
-        source: /var/run/docker.sock
-        target: /var/run/docker.sock
-
-  # Orion Context Broker
+# Orion Context Broker
   orion:
     image: fiware/orion
     hostname: orion
@@ -82,13 +63,15 @@ services:
 
   # Monitorizacion utilizando Grafana
   grafana:
-    image: grafana/grafana
+    image: grafana/grafana:master
     depends_on:
         - crate-db
     ports:
-        - "3003:3000"
+        - "3000:3000"
     environment:
-        - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-worldmap-panel
+       # - GF_INSTALL_PLUGINS=https://github.com/raintank/crate-datasource/archive/master.zip;crate-datasource,grafana-clock-panel,grafana-worldmap-panel
+       #- GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-worldmap-panel
+      - GF_INSTALL_PLUGINS=https://github.com/orchestracities/grafana-map-plugin/archive/master.zip;grafana-map-plugin,grafana-clock-panel,grafana-worldmap-panel
     networks:
       - fiware_grafana_net
     volumes:
@@ -97,8 +80,7 @@ services:
         target: /var/lib/grafana
   # Quantum Leap is persisting Short Term History to Crate-DB
   quantumleap:
-    image: smartsdk/quantumleap:0.6.1
-    hostname: quantumleap
+    image: smartsdk/quantumleap:0.7.5
     container_name: fiware-quantumleap
     ports:
       - "8668:8668"
@@ -107,11 +89,14 @@ services:
       - fiware_orion_net
     depends_on:
       - crate-db
+      - orion
+      - mongo-db
     environment:
-      - CRATE_HOST=crate-db
+      - "CRATE_HOST=http://crate-db"
     healthcheck:
       test: curl --fail -s http://localhost:8668/v2/version || exit 1
-
+  
+  # DATABASES
   # MONGO DB solo para servicio de Orion
   mongo-db:
     image: mongo:3.6
@@ -158,6 +143,7 @@ services:
    # command: crate -Clicense.enterprise=false -Cauth.host_based.enabled=false  -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*"
     networks:
       - fiware_grafana_net
+    command: -Ccluster.name=democluster -Chttp.cors.enabled=true -Chttp.cors.allow-origin="*"
     volumes:
       - type: volume
         source: vol_crate-db
@@ -177,3 +163,4 @@ volumes:
   vol_mysql-db:
   vol_crate-db:
   vol_grafana-conf:
+  

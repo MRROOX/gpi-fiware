@@ -10,30 +10,6 @@ Referencia: https://fiwaretourguide.readthedocs.io/en/latest/core/introduction/
 ```
 docker-compose up -d
 ```
-### Query Context Data
-
-
-# CrateDB 
-
-## Crate UI
-
-http://localhost:4200
-
-# Configuracion de Grafana
-
-En localhost:3000 ingresar utilizando con el usario `admin` y la password `admin`, cambiar password por una adecuada.
-
-## Configurar CrateDB en Grafana.
-
-En la opcion `create your first data source` seleccionar PostgreSQL 
-
-```
-Name: CrateDB
-Host: crate-db:5432
-Database: doc
-User: crate
-SSL Mode: disable 
-```
 ## Creación de Entidades 
 
 Entity es un único elemento de Context descrito por un objeto JSON. 
@@ -176,7 +152,7 @@ curl -iX POST \
    { 
      "apikey":      "4jggokgpepnvsb2uv4s40d59ov", 
      "cbroker":     "http://orion:1026", 
-     "entity_type": "Thing", 
+     "entity_type": "DHT", 
      "resource":    "/iot/d" 
    } 
  ] 
@@ -194,17 +170,17 @@ curl -iX POST  'http://localhost:4061/iot/devices' \
     "devices": [
    { 
      "device_id": "DHT22001", 
-     "entity_name": "urn:ngsi_ld:DHT22:003", 
+     "entity_name": "urn:ngsi_ld:DHT22:001", 
      "entity_type": "DHT", 
      "timezone": "Chile, Santiago",
      "attributes": [ 
        { "object_id": "temdht22",
          "name": "Tem",
-         "type": "Integer"
+         "type": "Double"
          },
        { "object_id": "humdht22",
          "name": "Hum",
-         "type": "Integer"
+         "type": "Double"
          }], 
      "static_attributes": [ 
        {"name":"refSegment",
@@ -243,7 +219,7 @@ La última línea de esa consulta son los datos del protocolo 2.0 Ultralight.
 ## Borrado de Sensores
 ```
 curl -iX DELETE 
---url 'http://localhost:4061/iot/devices/DHT22003' 
+--url 'http://localhost:4061/iot/devices/DHT22001' 
 -H 'fiware-service: openiot' 
 -H 'fiware-servicepath: /' 
 ```
