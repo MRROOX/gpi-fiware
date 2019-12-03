@@ -1,6 +1,10 @@
 # Tutorial
 
 ## 1. Desplegar servicios definidos en docker-compose.yml
+
+```
+docker-compose up -d
+```
 ## 2. Registro de entidad en Orion Context Brocker.
 ```
 POST http://localhost:1026/v2/entities
@@ -8,7 +12,7 @@ Header: Content-Type: "application/json"
         fiware-service: openiot
         fiware-servicepath: /
 
-En body, utilizadmos el contenido de dht22.json
+En el body, utilizadmos el contenido de dht22.json
  
 
 ```
@@ -23,7 +27,7 @@ Header: Content-Type: "application/json"
         fiware-service: openiot
         fiware-servicepath: /
 
-En body, utilizamos el contenido de dht22-sub.json
+En body, utilizamos el contenido de dht22-subcription.json
 
 ```
 
