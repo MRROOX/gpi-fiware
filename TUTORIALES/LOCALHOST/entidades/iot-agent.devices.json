@@ -7,7 +7,7 @@
           "entity_type": "DHT22",
           "protocol": "PDI-IoTA-UltraLight",
           "transport": "HTTP",
-          "endpoint": "http://iot-sensors:3001/iot/DHT22003",
+
           "attributes": [
             {"object_id": "t", "name": "temperature", "type":"Number"},
             {"object_id": "h", "name": "relativeHumidity", "type":"Number"}
