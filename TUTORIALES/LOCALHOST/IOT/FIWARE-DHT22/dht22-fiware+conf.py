@@ -32,7 +32,7 @@ try:
             print("Temperatura="+Temperatura)
             print("Humedad="+Humedad)
 
-            payloadTem = "t|"+Temperatura+"h|"+Humedad
+            payloadTem = "t|"+Temperatura
     
             responseTem = requests.request("POST", url, data=payloadTem, headers=iot_conf["headers"], params=iot_conf["querystring"])
 

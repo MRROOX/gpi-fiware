@@ -2,9 +2,9 @@ import requests
 
 url = "http://10.11.0.107:7896/iot/d"
 
-querystring = {"k":"4jggokgpepnvsb2uv4s40d59ov","i":"DHT22001"}
+querystring = {"k":"4jggokgpepnvsb2uv4s40d59ov","i":"DHT22003"}
 
-payload = "temdht22|23"
+payload = "t|10|h|30"
 headers = {
     'Content-Type': "text/plain",
     'User-Agent': "PostmanRuntime/7.17.1",

@@ -31,6 +31,15 @@ En body, utilizamos el contenido de dht22-sub.json
 ##  Configurar Servicios:
 ### CRATE DB:
 
+```
+    localhost:4200
+    -> (Obervar el nombre de la base de datos generada automaicamente)
+    mtopeniot
+
+
+
+```
+
 ### Consulta por entidad registrada en base de datos.
 
 ```
@@ -60,4 +69,35 @@ FROM etdht22 Time column time_index Metric column entity_id SELECT Column: tempe
 ```
 
 
+## Configuracion IOT-Agent 
 
+### Sirve de intermediario entre Orion Context Brocker y un Dispositivo IOT, para la comunicacion entre el dispositivo IOT se puede utilizar varios tipos de protocolos que son ligeros para la comunicación y el envio de datos bidireccional. Además se puede asignar una Token a cada disposivito para su identificacion e integrar una medida de seguridad.
+
+### Configuracion de SERVICE
+```
+POST http://localhost:4041/iot/services
+Header: Content-type: application/json
+        Fiware-service: openiot
+        fiware-servicepath: /
+
+En el body se agrea el json iot-agent.service.json
+
+```
+
+
+### Configuracion de DEVICES
+```
+POST http://localhost:4041/iot/devices
+
+Header: Content-type: application/json
+        Fiware-service: openiot
+        Fiware-servicepath: /
+
+En el body de agrega el json iot-agent.device.json
+```
+#### Se va a registrar una nueva entidad en Orion, esta entidad será del tipo DHT22, entonces podra ser mapeada por Queantum leap y se podran persistir su datos en la base de datos CrateDB y luego ser visualizados mediante Grafana.
+
+
+## Configuracion Cliente en Raspberry
+
+A modo de cliente o dispositivo IOT se utiliza una raspbery pi 3 modelo b, en donde se encuentra integrado un sensor DHT22 de temperatura y humedad.
