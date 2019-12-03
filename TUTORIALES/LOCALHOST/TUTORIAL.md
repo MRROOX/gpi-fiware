@@ -1,6 +1,10 @@
 # Tutorial
 
 ## 1. Desplegar servicios definidos en docker-compose.yml
+
+```
+docker-compose up -d
+```
 ## 2. Registro de entidad en Orion Context Brocker.
 ```
 POST http://localhost:1026/v2/entities
@@ -8,7 +12,7 @@ Header: Content-Type: "application/json"
         fiware-service: openiot
         fiware-servicepath: /
 
-En body, utilizadmos el contenido de dht22.json
+En el body, utilizadmos el contenido de dht22.json
  
 
 ```
@@ -23,7 +27,7 @@ Header: Content-Type: "application/json"
         fiware-service: openiot
         fiware-servicepath: /
 
-En body, utilizamos el contenido de dht22-sub.json
+En body, utilizamos el contenido de dht22-subcription.json
 
 ```
 
@@ -101,3 +105,22 @@ En el body de agrega el json iot-agent.device.json
 ## Configuracion Cliente en Raspberry
 
 A modo de cliente o dispositivo IOT se utiliza una raspbery pi 3 modelo b, en donde se encuentra integrado un sensor DHT22 de temperatura y humedad.
+```
+POST http://localhost:7896/iot/d
+
+Header: Content-Type: text/plain
+
+Params: 
+        k=4jggokgpepnvsb2uv4s40d59ov
+        i=DHT22003
+
+En el body se agrega:
+
+t|22|h|34
+
+```
+
+El atributos t y h son definidos en iot-agent.devices.json y corresponden a object_id en este paso para la temperatura y humedad.
+
+Mediante el Script en Python que se encuetra en LOCALHOST -> IOT -> FIWARE-DHT22 llamado dht22-fiware+conf.py se utilizan estos parametros y se envia al servicio de IOT-AGENT los datos obtenidos desde el sensor DHT22. Ademas se encuentra un archivo de configuración iot-agent.conf.json en donde se puede configurar la IP o URL del servicio de IOT-AGENT.
+
