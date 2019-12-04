@@ -1,11 +1,11 @@
 # Tutorial
 
 ## Diagrama de Arquitectura
-![](https://github.com/MRROOX/gpi-fiware/blob/master/TUTORIALES/LOCALHOST/LOCALHOST.png?raw=true)
+![](https://raw.githubusercontent.com/MRROOX/gpi-fiware/CORE-FIWARE/TUTORIALES/LOCALHOST/LocalhostA.png)
 
 ## Diagrama de Secuencia
 
-![](URL)
+![](https://raw.githubusercontent.com/MRROOX/gpi-fiware/CORE-FIWARE/TUTORIALES/LOCALHOST/Secuencia.png)
 
 ## Listado de Componentes y Servicios
 
