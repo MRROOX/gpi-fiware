@@ -1,7 +1,7 @@
 # Tutorial
 
 ## Diagrama de Arquitectura
-![](URL)
+![](https://github.com/MRROOX/gpi-fiware/blob/master/TUTORIALES/LOCALHOST/LOCALHOST.png?raw=true)
 
 ## Diagrama de Secuencia
 
