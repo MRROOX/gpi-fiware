@@ -62,28 +62,6 @@ services:
     networks: 
       - fiware_orion_net
 
-# Persistencia de Datos Utilizando Cygnus
-  cygnus:
-    image: fiware/cygnus-ngsi:latest
-    hostname: cygnus
-    container_name: fiware-cygnus
-    depends_on:
-        - mysql-db
-        - orion
-    ports:
-        - "5050:5050"
-        - "5080:5080"
-    networks:
-      - fiware_cygnus_net
-    environment:
-        - "CYGNUS_MYSQL_HOST=mysql-db"
-        - "CYGNUS_MYSQL_PORT=3306"
-        - "CYGNUS_MYSQL_USER=root"
-        - "CYGNUS_MYSQL_PASS=123"
-        - "CYGNUS_LOG_LEVEL=DEBUG"
-        - "CYGNUS_SERVICE_PORT=5050"
-        - "CYGNUS_API_PORT=5080"
-
   # Monitorizacion utilizando Grafana
   grafana:
     image: grafana/grafana:master
@@ -135,24 +113,6 @@ services:
         source: vol_mongo-db
         target: /data
     
-  # MYSQL solo para utilizar Cygnus  
-  mysql-db:
-    restart: always
-    image: mysql:5.7.16
-    hostname: mysql-db
-    container_name: mysql-db
-    ports:
-        - "3306:3306"
-    environment:
-        - "MYSQL_ROOT_PASSWORD=123"
-        - "MYSQL_ROOT_HOST=%"
-    networks:
-      - fiware_cygnus_net
-    volumes: 
-      - type: volume
-        source: vol_mysql-db
-        target: /var/lib/mysql
-
   # Crate para utilizar Grafana  
   crate-db:
     image: crate:3.3.2
@@ -175,15 +135,15 @@ services:
 # Redes
 networks:
   fiware_orion_net:
-  fiware_cygnus_net:
+ 
   fiware_grafana_net:
 
 # Volumenes para persistir la data.
 volumes:
-  vol_portainer_data:
+  #vol_portainer_data:
 
   vol_mongo-db:
-  vol_mysql-db:
+
   vol_crate-db:
   vol_grafana-conf:
   
