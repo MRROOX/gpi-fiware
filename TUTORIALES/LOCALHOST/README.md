@@ -1,7 +1,7 @@
 # Tutorial
 
 ## Diagrama de Arquitectura
-![](URL)
+![](https://github.com/MRROOX/gpi-fiware/blob/master/TUTORIALES/LOCALHOST/LOCALHOST.png?raw=true)
 
 ## Listado de Componentes y Servicios
 
