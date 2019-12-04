@@ -9,7 +9,15 @@
 
 ## Listado de Componentes y Servicios
 
-![](URL)
+| Servicio | Puertos |
+| ------------- | ------------- |
+| IOT-AGENT  |   7896, 4041  |
+| ORION  |  1026  |
+| QUANTUMLEAF | 8868  |  
+| GRAFANA  |  3000  |  
+| MONGODB | 27017  |  
+| CRATEDB  |  5432, 4300, 4200  |
+
 
 ## 1. Desplegar servicios definidos en docker-compose.yml
 
