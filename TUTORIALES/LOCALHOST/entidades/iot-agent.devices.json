@@ -1,17 +1,17 @@
 {
 
-    "devices": [
-        {
-          "device_id": "DHT22003",
-          "entity_name": "urn:ngsi-ld:Dht22:003",
-          "entity_type": "DHT22",
-          "protocol": "PDI-IoTA-UltraLight",
-          "transport": "HTTP",
+  "devices": [
+      {
+        "device_id": "DHT22004",
+        "entity_name": "DHT22004",
+        "entity_type": "DHT22",
+        "protocol": "PDI-IoTA-UltraLight",
+        "transport": "HTTP",
 
-          "attributes": [
-            {"object_id": "t", "name": "temperature", "type":"Number"},
-            {"object_id": "h", "name": "relativeHumidity", "type":"Number"}
-           ]
-        }
-      ]
+        "attributes": [
+          {"object_id": "t", "name": "temperature", "type":"Number"},
+          {"object_id": "h", "name": "relativeHumidity", "type":"Number"}
+         ]
+      }
+    ]
 }
