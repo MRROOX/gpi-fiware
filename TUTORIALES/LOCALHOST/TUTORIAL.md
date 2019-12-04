@@ -1,5 +1,12 @@
 # Tutorial
 
+## Diagrama de Arquitectura
+![](URL)
+
+## Listado de Componentes y Servicios
+
+![](URL)
+
 ## 1. Desplegar servicios definidos en docker-compose.yml
 
 ```
@@ -124,3 +131,17 @@ El atributos t y h son definidos en iot-agent.devices.json y corresponden a obje
 
 Mediante el Script en Python que se encuetra en LOCALHOST -> IOT -> FIWARE-DHT22 llamado dht22-fiware+conf.py se utilizan estos parametros y se envia al servicio de IOT-AGENT los datos obtenidos desde el sensor DHT22. Ademas se encuentra un archivo de configuración iot-agent.conf.json en donde se puede configurar la IP o URL del servicio de IOT-AGENT.
 
+# Referencias:
+
+
+#### https://github.com/FIWARE/catalogue/blob/master/security/README.md
+
+#### https://fiware-training.readthedocs.io/es_MX/latest/casodeestudio/descripcion/
+
+#### https://hub.docker.com/r/fiware/quantum-leap/dockerfile
+
+#### https://camo.githubusercontent.com/93f44facc15bb6a9edf6ab9968fc1d8b862033fe/68747470733a2f2f6669776172652e6769746875622e696f2f7475746f7269616c732e496f542d4167656e742f696d672f6172636869746563747572652e706e67
+
+#### https://www.fiware.org/wp-content/uploads/2016/12/2_FIWARE-NGSI-Managing-Context-Information-at-large-scale.pdf
+
+#### https://fiware-tutorials.readthedocs.io/en/latest/time-series-data/index.html
