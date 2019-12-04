@@ -3,6 +3,10 @@
 ## Diagrama de Arquitectura
 ![](URL)
 
+## Diagrama de Secuencia
+
+![](URL)
+
 ## Listado de Componentes y Servicios
 
 ![](URL)
