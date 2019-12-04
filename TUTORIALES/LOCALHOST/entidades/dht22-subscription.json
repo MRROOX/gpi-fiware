@@ -1,5 +1,5 @@
 {
-    "description": "Notify QuantumLeap on luminosity changes on any DHT22",
+    "description": "Notificar a Queantumleap cuando cambia cualquier DHT22",
     "subject": {
       "entities": [
         {
