@@ -1,6 +1,32 @@
 version: '3.3'
 
 services:
+# OpenALRP Service
+  openalpr:
+    build: open-alpr
+    hostname: openalpr
+    container_name: openalpr
+    depends_on:
+      - mongo-db
+      - orion
+    networks: 
+      - fiware_orion_net
+    ports:
+      - "8888:8080"
+    volumes:
+      - type: volume
+        source: vol_openalpr_A
+        target: /etc/openalpr/
+      - type: volume
+        source: vol_openalpr_B
+        target: /usr/share/openalpr/
+      - type: volume
+        source: vol_openalpr_C
+        target: /var/lib/openalpr/plateimages/
+
+    command: python /opt/openalprapi/webservice.py -p 8080
+
+
 # Orion Context Broker
   orion:
     image: fiware/orion
@@ -158,6 +184,10 @@ networks:
 # Volumenes para persistir la data.
 volumes:
   vol_portainer_data:
+
+  vol_openalpr_A:
+  vol_openalpr_B:
+  vol_openalpr_C:
 
   vol_mongo-db:
   vol_mysql-db:

@@ -13,3 +13,14 @@ Es una libreria en C++ que utiliza openCV y Ocr para la deteccion de matriculas,
 ### https://github.com/openalpr/train-ocr
 
 
+## Patente Chile:
+
+### https://es.wikipedia.org/wiki/Archivo:Matr%C3%ADcula_automovil%C3%ADstica_Chile_2014_GK%E2%80%A2SB*78_particular_con_FE-Schrift.jpg
+
+### https://www.dafont.com/es/fe-font.font
+
+## Teasser OCR
+
+### https://github.com/tesseract-ocr/tesseract
+
+
