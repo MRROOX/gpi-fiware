@@ -27,7 +27,7 @@ COPY daemon/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 #COPY license.conf /etc/openalpr/license.conf
 COPY daemon/alprd.conf /etc/openalpr/alprd.conf
 
-# CMD ["/usr/bin/supervisord"]
+
 
 
 # PYTHON CODE WEB SERVICE
@@ -36,12 +36,15 @@ RUN apt-get update && apt-get install -y python-pip python-openalpr
 
 COPY webservice/src/requirements.txt /opt/openalprapi/
 
+RUN pip install --upgrade pip setuptools wheel
+
 RUN pip install -r /opt/openalprapi/requirements.txt
 
 # send over the license key 
 #COPY license.conf /etc/openalpr/license.conf
 
 COPY  webservice/src/webservice.py /opt/openalprapi/
+COPY  webservice/src/config/alpr-config.json /opt/openalprapi/
 
 EXPOSE 8080
 

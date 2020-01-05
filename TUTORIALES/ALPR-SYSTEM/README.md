@@ -5,6 +5,14 @@
 
 docker-compose up -d
 
+## Lista de Servicios
+| Service               | Port | Access  |
+| --------------------- | ---- | ------- |
+| APLR Service          | 8888 | Public  |
+
+
+
+
 # Servicios de ALPR
 
 http://localhost:8888/
@@ -25,6 +33,16 @@ curl -s -X POST -F name=file -F "image=@sample.jpg" 'http://localhost:8888/v1/id
 
 
 # Referencias
+#### Stream Video RPI
+
+https://arduinoinfo.mywikis.net/wiki/LicensePlateRecognition
+
+https://github.com/marcbelmont/deep-license-plate-recognition/blob/master/alpr_video.py
+
+http://doc.openalpr.com/video_processing.html
+
+https://gist.github.com/jkjung-avt/790a1410b91c170187f8dbdb8cc698c8
+
 ##### openALPR
 Es una libreria en C++ que utiliza openCV y Ocr para la deteccion de matriculas, mediante openCV se identifica la matricula y mediante OCR se crean los modelos para la identificacion, se procede al entrenamiento mediante datos de entrada o set de datos (imagenes de matriculas).
 

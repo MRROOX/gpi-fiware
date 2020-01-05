@@ -5,6 +5,7 @@ import Adafruit_DHT
 
 import requests
 import json
+
 from pprint import pprint
 
 DHT_SENSOR = Adafruit_DHT.DHT22

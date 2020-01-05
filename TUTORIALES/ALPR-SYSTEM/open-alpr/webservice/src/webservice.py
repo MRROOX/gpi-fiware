@@ -8,6 +8,8 @@ from concurrent.futures import ThreadPoolExecutor
 import threading
 import multiprocessing
 
+import requests
+
 from argparse import ArgumentParser
 
 from openalpr import Alpr
@@ -15,26 +17,33 @@ from openalpr import Alpr
 
 HTTP_CODE_BAD_REQUEST = 400
 
+json_data_file = open("alpr-config.json", "r").read()
+iot_conf = json.loads(json_data_file)
+pprint(iot_conf)
+
+url = "http://"+iot_conf["host_r"]+":"+iot_conf["port_r"]+iot_conf["remote_r"]
+print(url)
+
 if __name__ == "__main__":
 
     parser = ArgumentParser(description='TrueCar Computer Vision Webservice')
 
     parser.add_argument("-p", "--port", dest="port", action="store", metavar='port', type=int, required=False, default=8888,
-                      help="Port to listen on" )
+                        help="Port to listen on")
 
     parser.add_argument("-t", "--threads", dest="threads", action="store", metavar='threads', type=int, required=False, default=2,
-                      help="Number of processing threads to handle computer vision jobs.  Should not exceed number of CPU cores" )
+                        help="Number of processing threads to handle computer vision jobs.  Should not exceed number of CPU cores")
 
     parser.add_argument('-d', '--debug', action='store_true', default=False,
                         help="Show debug output")
-
 
     options = parser.parse_args()
 
     debug = options.debug
 
     if options.threads > multiprocessing.cpu_count():
-        print ("Warning, attempting to use %d threads when your system only has %d cores" % (options.threads, multiprocessing.cpu_count()))
+        print("Warning, attempting to use %d threads when your system only has %d cores" % (
+            options.threads, multiprocessing.cpu_count()))
 
     executor = ThreadPoolExecutor(options.threads)
 
@@ -46,10 +55,8 @@ class AlprHandler(tornado.web.RequestHandler):
 
     alpr_processes = {}
 
-
     @gen.coroutine
     def post(self):
-
 
         start = time.clock()
         response = {
@@ -79,20 +86,23 @@ class AlprHandler(tornado.web.RequestHandler):
         fileinfo = self.request.files['image'][0]
         jpeg_bytes = fileinfo['body']
 
-
         if len(jpeg_bytes) <= 0:
             self.set_status(HTTP_CODE_BAD_REQUEST)
             response['error'] = 'invalid_image_data'
             self.finish(json.dumps(response))
             return
 
-
         alpr_results = yield self.alpr_processor(jpeg_bytes, topn, state)
-
+        # Testing Conection with Orion Brocker
+        alpr_results['testing'] = 'HOLA MUNDO'
 
         end = time.clock()
         if debug:
-            print ("Total POST time: %.2f ms" % ((end - start) * 1000))
+            print("Total POST time: %.2f ms" % ((end - start) * 1000))
+
+        # Send Data To ORION
+
+        #response_orion = requests.request("POST", url, data=payloadHum, headers=iot_conf["headers"], params=iot_conf["querystring"])
 
         self.finish(json.dumps(alpr_results))
 
@@ -103,8 +113,9 @@ class AlprHandler(tornado.web.RequestHandler):
 
         if thread_id not in self.alpr_processes:
             if debug:
-                print ("Kicking off new ALPR process")
-            self.alpr_processes[thread_id] = Alpr("us", "/etc/openalpr/openalpr.conf", "/usr/share/openalpr/runtime_data")
+                print("Kicking off new ALPR process")
+            self.alpr_processes[thread_id] = Alpr(
+                "us", "/etc/openalpr/openalpr.conf", "/usr/share/openalpr/runtime_data")
             self.alpr_processes[thread_id].set_detect_region(True)
 
         self.alpr_processes[thread_id].set_top_n(topn)
@@ -112,25 +123,24 @@ class AlprHandler(tornado.web.RequestHandler):
             self.alpr_processes[thread_id].set_default_region(state)
 
         if debug:
-            print ("Starting alpr job")
-            print ("back-queue size: %d" % executor._work_queue.qsize())
+            print("Starting alpr job")
+            print("back-queue size: %d" % executor._work_queue.qsize())
 
-            print ("args: topn %d, state: %s" % (topn, state))
-            print ("Thread ID: " + str (threading.currentThread().ident))
+            print("args: topn %d, state: %s" % (topn, state))
+            print("Thread ID: " + str(threading.currentThread().ident))
         try:
             start = time.clock()
             results = self.alpr_processes[thread_id].recognize_array(image)
             end = time.clock()
 
             if debug:
-                print ("ALPR Processing time: %.2f ms" % ((end - start) * 1000))
+                print("ALPR Processing time: %.2f ms" % ((end - start) * 1000))
             return results
         except:
             return {'error': 'alpr_processing_error'}
 
 
 class InfoHandler(tornado.web.RequestHandler):
-
 
     def get(self):
 
@@ -144,10 +154,10 @@ class InfoHandler(tornado.web.RequestHandler):
 
 class HealthcheckHandler(tornado.web.RequestHandler):
 
-
     def get(self):
         self.set_status(200)
         self.finish("")
+
 
 application = tornado.web.Application([
     (r"/v1/identify/plate", AlprHandler),
@@ -158,7 +168,7 @@ application = tornado.web.Application([
 
 if __name__ == "__main__":
 
-    print ("OpenALPR Web server started on port %d" % (options.port))
-    print ("Using %d parallel ALPR threads" % (options.threads))
+    print("OpenALPR Web server started on port %d" % (options.port))
+    print("Using %d parallel ALPR threads" % (options.threads))
     application.listen(options.port)
     tornado.ioloop.IOLoop.current().start()
