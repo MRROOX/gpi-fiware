@@ -1,51 +1,34 @@
-FROM ubuntu:16.04
+FROM ubuntu:18.04
 RUN apt-get update && apt-get install -y \
       openalpr \
       openalpr-daemon \
-      python-openalpr && \
+      openalpr-utils \
+      libopenalpr-dev \
+      python3-pip \
+      python3-openalpr && \
       touch /usr/share/openalpr/is_docker
 
-# Adjust beanstalkd to also allow remote connections
-# RUN sed -i 's/BEANSTALKD_LISTEN_ADDR\s*=\s*127.0.0.1/BEANSTALKD_LISTEN_ADDR=0.0.0.0/' /etc/default/beanstalkd
+# # Override script for "service" to allow alprlink to restart service
+# COPY webservice/daemon/service-override /bin/systemctl
 
-# Expose the beanstalkd port and the web service
-EXPOSE 11300 8355
+# # Startup script for OpenALPR services
+# COPY webservice/daemon/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
-# Allow the plate images to be persisted on the host
-VOLUME /var/lib/openalpr/
-VOLUME /etc/openalpr/
+# # send over the license key and the alprd configuration
 
-WORKDIR ~/
-
-# Override script for "service" to allow alprlink to restart service
-COPY daemon/service-override /bin/systemctl
-
-# Startup script for OpenALPR services
-COPY daemon/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# send over the license key and the alprd configuration
-#COPY license.conf /etc/openalpr/license.conf
-COPY daemon/alprd.conf /etc/openalpr/alprd.conf
-
-
-
+# COPY webservice/daemon/alprd.conf /etc/openalpr/alprd.conf
 
 # PYTHON CODE WEB SERVICE
 
-RUN apt-get update && apt-get install -y python-pip python-openalpr
+COPY webservice/requirements.txt /opt/openalprapi/
 
-COPY webservice/src/requirements.txt /opt/openalprapi/
+RUN pip3 install -r /opt/openalprapi/requirements.txt
 
-RUN pip install --upgrade pip setuptools wheel
+RUN cp -r /usr/share/openalpr/runtime_data/ocr/tessdata/* /usr/share/openalpr/runtime_data/ocr/
 
-RUN pip install -r /opt/openalprapi/requirements.txt
+# COPY  webservice/webservice.py /opt/openalprapi/
 
-# send over the license key 
-#COPY license.conf /etc/openalpr/license.conf
 
-COPY  webservice/src/webservice.py /opt/openalprapi/
-COPY  webservice/src/config/alpr-config.json /opt/openalprapi/
+# EXPOSE 8080
 
-EXPOSE 8080
-
-CMD ["python", "/opt/openalprapi/webservice.py", "-p", "8080"]
+# CMD ["python3", "/opt/openalprapi/webservice.py", "-p", "8080"]

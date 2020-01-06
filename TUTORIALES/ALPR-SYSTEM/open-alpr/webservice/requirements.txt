@@ -1,0 +1,9 @@
+argparse
+backports.ssl-match-hostname
+certifi
+futures
+tornado
+requests
+pprint
+openalpr
+numpy

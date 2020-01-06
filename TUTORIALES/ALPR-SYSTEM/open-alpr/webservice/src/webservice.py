@@ -8,6 +8,7 @@ from concurrent.futures import ThreadPoolExecutor
 import threading
 import multiprocessing
 
+from pprint import pprint
 import requests
 
 from argparse import ArgumentParser
@@ -17,7 +18,7 @@ from openalpr import Alpr
 
 HTTP_CODE_BAD_REQUEST = 400
 
-json_data_file = open("alpr-config.json", "r").read()
+json_data_file = open("/opt/openalprapi/config/alpr-config.json", "r").read()
 iot_conf = json.loads(json_data_file)
 pprint(iot_conf)
 
