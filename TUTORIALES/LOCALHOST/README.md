@@ -150,10 +150,10 @@ Se envia un imagen al serviciode Alpr este procesa la imagen y se obtiene como r
 
 ## Diagrama de Arquitectura + Servicio ALPR
 
-![](https://raw.githubusercontent.com/MRROOX/gpi-fiware/CORE-FIWARE/TUTORIALES/LOCALHOST/Secuencia+ALPR.png)
+![](https://raw.githubusercontent.com/MRROOX/gpi-fiware/master/TUTORIALES/LOCALHOST/LOCALHOST%2BALPR.png)
 
 ## Diagrama de Secuencia + Servicio ALPR
-![](https://raw.githubusercontent.com/MRROOX/gpi-fiware/CORE-FIWARE/TUTORIALES/LOCALHOST/LOCALHOST+ALPR.png)
+![](https://raw.githubusercontent.com/MRROOX/gpi-fiware/master/TUTORIALES/LOCALHOST/Secuencia%2BALPR.png)
 
 ## Configuracion de Cygnus para Persistir en MongoDB.
 
