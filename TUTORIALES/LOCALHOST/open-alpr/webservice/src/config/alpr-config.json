@@ -3,7 +3,7 @@
     "host_r": "10.11.0.107",
     "port_r": "1026",
     "remote_r": "/v2/entities/ALPR0004/attrs",
-    "orion_api":"http://10.11.0.107:1026/v2/entities/ALPR0004/attrs",
+    "orion_api":"http://orion:1026/v2/entities/ALPR0004/attrs",
     "headers": {
         "Content-Type": "application/json",
         "Fiware-service":"openalpr",

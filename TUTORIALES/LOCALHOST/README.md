@@ -13,7 +13,7 @@
 | ------------- | ------------- |
 | IOT-AGENT  |   7896, 4041  |
 | ORION  |  1026  |
-| QUANTUMLEAF | 8868  |  
+| QUANTUMLEAF | 8668  |  
 | GRAFANA  |  3000  |  
 | MONGODB | 27017  |  
 | CRATEDB  |  5432, 4300, 4200  |
@@ -147,6 +147,11 @@ Mediante el Script en Python que se encuetra en LOCALHOST -> IOT -> FIWARE-DHT22
 Se integra un servicio de reconocimiento de patentes vehiculares, utilizando Open Alpr y Fiware. 
 
 Se envia un imagen al serviciode Alpr este procesa la imagen y se obtiene como resultado el valor de la patente y su grado de confianza, estos datos son enviado al Orion Broker. Median el servicio de Cygnus se persisten los datos en una base de datos MongoDB.
+
+## Diagrama de Arquitectura + Servicio ALPR
+
+## Diagrama de Secuencia + Servicio ALPR
+
 
 ## Configuracion de Cygnus para Persistir en MongoDB.
 
