@@ -178,7 +178,7 @@ En el body, utilizadmos los atributos que se requiera actualizar.
 ```
 ## 3. Subcripcion de servicio de Cygnus
 ```
-PATCH http://localhost:1026/v2/subscriptions/
+POST http://localhost:1026/v2/subscriptions/
 Header: Content-Type: "application/json"
         fiware-service: openalpr
         fiware-servicepath: /alpr
@@ -187,6 +187,7 @@ En el body, utilizadmos el contenido de alpr-cygnus.json
  
 ```
 ## Uso de Servicio de ALPR
+
 ```
 POST http://localhost:8090/v1/identify/plate?country=us
 Header: Content-Type: "application/x-www-form-urlencoded"
