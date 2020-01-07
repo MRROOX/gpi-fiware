@@ -19,11 +19,8 @@ from openalpr import Alpr
 HTTP_CODE_BAD_REQUEST = 400
 
 json_data_file = open("/opt/openalprapi/config/alpr-config.json", "r").read()
-iot_conf = json.loads(json_data_file)
-pprint(iot_conf)
-
-url = "http://"+iot_conf["host_r"]+":"+iot_conf["port_r"]+iot_conf["remote_r"]
-print(url)
+config_service = json.loads(json_data_file)
+pprint(config_service)
 
 if __name__ == "__main__":
 
@@ -64,6 +61,15 @@ class AlprHandler(tornado.web.RequestHandler):
             'version': 1,
         }
 
+        aplr_fiware_data = {
+            'data':{}
+        }
+
+        # 
+        data_orion = {
+            'value': {}
+        }
+
         if 'image' not in self.request.files:
             response['error'] = 'image_missing'
             self.finish(json.dumps(response))
@@ -94,18 +100,24 @@ class AlprHandler(tornado.web.RequestHandler):
             return
 
         alpr_results = yield self.alpr_processor(jpeg_bytes, topn, state)
-        # Testing Conection with Orion Brocker
-        alpr_results['testing'] = 'HOLA MUNDO'
 
         end = time.clock()
         if debug:
             print("Total POST time: %.2f ms" % ((end - start) * 1000))
 
-        # Send Data To ORION
+        # Data format for Orion Brocker
+        data_orion['value']=alpr_results
 
-        #response_orion = requests.request("POST", url, data=payloadHum, headers=iot_conf["headers"], params=iot_conf["querystring"])
+        aplr_fiware_data['data']=data_orion
 
-        self.finish(json.dumps(alpr_results))
+        # Send Data To Orion Brocker
+
+        response_orion = requests.request("PATCH", config_service["orion_api"], data=json.dumps(aplr_fiware_data), headers=config_service["headers"])
+
+        self.finish(json.dumps(response_orion.text))
+
+        # self.finish(json.dumps(aplr_fiware_data))
+        # self.finish(json.dumps(alpr_results))
 
     @run_on_executor(executor='executor')
     def alpr_processor(self, image, topn, state):

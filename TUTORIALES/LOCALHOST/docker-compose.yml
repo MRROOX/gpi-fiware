@@ -1,24 +1,44 @@
 version: '3.3'
 
 services:
-  # Portainer
-  # portainer:
-  #   image: portainer/portainer
-  #   container_name: portainer_fiware
-  #   restart: on-failure
-  #   ports:
-  #     - "9999:9000"
-  #     - "8008:8080"
-  #   volumes:
-  #     - type: volume
-  #       source: vol_portainer_data
-  #       target: /data
-  #     - type: bind
-  #       source: /usr/bin/docker
-  #       target: /usr/bin/docker
-  #     - type: bind
-  #       source: /var/run/docker.sock
-  #       target: /var/run/docker.sock
+
+  # OpenALRP Service
+  openalpr:
+    build: open-alpr
+    hostname: openalpr
+    container_name: openalpr
+    depends_on:
+      - mongo-db
+      - orion
+    networks: 
+      - fiware_orion_net
+    ports:
+      - "8090:8090"
+    volumes:
+      - type: bind
+        source: ./open-alpr/webservice/daemon/service-override
+        target: /bin/systemctl
+      - type: bind
+        source: ./open-alpr/webservice/daemon/supervisord.conf
+        target: /etc/supervisor/conf.d/supervisord.conf
+      - type: bind
+        source: ./open-alpr/webservice/daemon/alprd.conf
+        target: /etc/openalpr/alprd.conf
+      - type: bind
+        source: ./open-alpr/webservice/src/
+        target: /opt/openalprapi/
+
+      - type: volume
+        source: vol_openalpr_A
+        target: /etc/openalpr/
+      - type: volume
+        source: vol_openalpr_B
+        target: /usr/share/openalpr/
+      - type: volume
+        source: vol_openalpr_C
+        target: /var/lib/openalpr/plateimages/
+
+    command: python3 /opt/openalprapi/AlprService.py -p 8090
 
   # Orion Context Broker
   orion:
@@ -97,6 +117,28 @@ services:
     healthcheck:
       test: curl --fail -s http://localhost:8668/v2/version || exit 1
   
+  
+  # CYGNUS SERVICE - MONGO DB PERSISTING CONTEXT    
+  cygnus:
+      image: fiware/cygnus-ngsi:latest
+      hostname: cygnus
+      container_name: fiware-cygnus
+      depends_on:
+          - mongo-db
+      networks:
+        - fiware_orion_net
+      expose:
+          - "5080"
+      ports:
+          - "5051:5051"
+          - "5080:5080"
+      environment:
+          - "CYGNUS_MONGO_HOSTS=mongo-db:27017"
+          - "CYGNUS_MONGO_SERVICE_PORT=5051"
+          - "CYGNUS_LOG_LEVEL=DEBUG"
+          - "CYGNUS_API_PORT=5080"
+          - "CYGNUS_SERVICE_PORT=5051"
+  
   # DATABASES
   # MONGO DB solo para servicio de Orion
   mongo-db:
@@ -140,7 +182,9 @@ networks:
 
 # Volumenes para persistir la data.
 volumes:
-  #vol_portainer_data:
+  vol_openalpr_A:
+  vol_openalpr_B:
+  vol_openalpr_C:
 
   vol_mongo-db:
 

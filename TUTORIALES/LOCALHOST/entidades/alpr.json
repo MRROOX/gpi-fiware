@@ -1,0 +1,29 @@
+{
+    "id":"ALPR0004",
+    "type":"ALPR",
+    "dateObserved":{
+        "type":"DateTime",
+        "value":"2019-09-30T18:00:00-05:00"
+    },
+    "address": {
+        "type": "StructuredValue",
+        "value": {
+            "addressCountry": "CL",
+            "addressLocality": "Temuco",
+            "streetAddress": "UFRO"           
+        }
+   },
+    "location": {
+         "value": {
+            "type": "Point",
+            "coordinates": [-38.751398,-72.605476],
+            "latitude": -38.751398,
+            "longitude": -72.605476
+        },
+        "type": "geo:json"
+  },
+    "data":{
+    	"type":"objetc",
+    	"value":{}
+    }
+}
