@@ -1,0 +1,17 @@
+{
+    "description": "Notify Cygnus of all ALPR context changes",
+    "subject": {
+      "entities": [
+        {
+          "idPattern": "ALPR.*"
+        }
+      ]
+    },
+    "notification": {
+      "http": {
+        "url": "http://cygnus:5051/notify"
+      },
+      "attrsFormat": "legacy"
+    },
+    "throttling": 5
+  }

@@ -143,8 +143,59 @@ El atributos t y h son definidos en iot-agent.devices.json y corresponden a obje
 
 Mediante el Script en Python que se encuetra en LOCALHOST -> IOT -> FIWARE-DHT22 llamado dht22-fiware+conf.py se utilizan estos parametros y se envia al servicio de IOT-AGENT los datos obtenidos desde el sensor DHT22. Ademas se encuentra un archivo de configuración iot-agent.conf.json en donde se puede configurar la IP o URL del servicio de IOT-AGENT.
 
+# Sistema ALPR y Fiware.
+Se integra un servicio de reconocimiento de patentes vehiculares, utilizando Open Alpr y Fiware. 
+
+Se envia un imagen al serviciode Alpr este procesa la imagen y se obtiene como resultado el valor de la patente y su grado de confianza, estos datos son enviado al Orion Broker. Median el servicio de Cygnus se persisten los datos en una base de datos MongoDB.
+
+## Configuracion de Cygnus para Persistir en MongoDB.
+
+## 1. Registro de entidad en Orion Context Brocker.
+```
+POST http://localhost:1026/v2/entities
+Header: Content-Type: "application/json"
+        fiware-service: openalpr
+        fiware-servicepath: /alpr
+
+En el body, utilizadmos el contenido de alpr.json
+ 
+```
+
+## 2. Actualización de Contexto
+```
+PATCH http://localhost:1026/v2/entities/ALPR0004/attrs
+Header: Content-Type: "application/json"
+        fiware-service: openalpr
+        fiware-servicepath: /alpr
+
+En el body, utilizadmos los atributos que se requiera actualizar.
+ 
+```
+## 3. Subcripcion de servicio de Cygnus
+```
+PATCH http://localhost:1026/v2/subscriptions/
+Header: Content-Type: "application/json"
+        fiware-service: openalpr
+        fiware-servicepath: /alpr
+
+En el body, utilizadmos el contenido de alpr-cygnus.json
+ 
+```
+## Uso de Servicio de ALPR
+```
+POST http://localhost:8090/v1/identify/plate?country=us
+Header: Content-Type: "application/x-www-form-urlencoded"
+
+En el body, se utiliza un form-data, image = <imagen.jpg>
+
+
+```
+
+
 # Referencias:
 
+
+#### https://documenter.getpostman.com/view/513743/RWEcR2DC?version=latest#eb4be0c3-5563-444a-9539-c90ef2df0fda
 
 #### https://github.com/FIWARE/catalogue/blob/master/security/README.md
 
