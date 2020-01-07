@@ -114,7 +114,8 @@ class AlprHandler(tornado.web.RequestHandler):
 
         response_orion = requests.request("PATCH", config_service["orion_api"], data=json.dumps(aplr_fiware_data), headers=config_service["headers"])
 
-        self.finish(json.dumps(response_orion.text))
+        data_orion["orion_response"]=response_orion.text
+        self.finish(json.dumps(data_orion))
 
         # self.finish(json.dumps(aplr_fiware_data))
         # self.finish(json.dumps(alpr_results))
